@@ -1,0 +1,37 @@
+[
+  {
+    "name": "enzo",
+    "email": "e@p.com",
+    "company": "FIAP",
+    "step": "novo",
+    "created": "2026-09-10"
+  },
+  {
+    "name": "Enzo",
+    "email": "e@p.com",
+    "company": "BB",
+    "step": "",
+    "created": "2026-09-10"
+  },
+  {
+    "name": "pedro",
+    "email": "p@g.com",
+    "company": "nike",
+    "step": "novo",
+    "created": "2026-09-11"
+  },
+  {
+    "name": "Raiza",
+    "email": "r@h.com",
+    "company": "nubank",
+    "step": "inicial",
+    "created": "2026-09-11"
+  },
+  {
+    "name": "erica",
+    "email": "e@h.com",
+    "company": "aquela",
+    "step": "final",
+    "created": "2026-09-11"
+  }
+]
