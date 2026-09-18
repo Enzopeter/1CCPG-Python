@@ -1,5 +1,5 @@
 from pathlib import Path
-import json
+import json, csv
 
 DATA_DIR = Path(__file__).resolve().parent / 'data'
 DATA_DIR.mkdir(exist_ok=True)
@@ -23,9 +23,32 @@ def create_lead(lead_dict):
     leads.append(lead_dict)
     DB_PATH.write_text(json.dumps(leads, ensure_ascii=False, indent=2), encoding='utf-8')
 
-#Uptade
+#Export leads como CSV
+def export_csv(): #Exporta os leads para CSV e Retorna o caminho do arquivo criado
+    path_csv = DATA_DIR / 'leads.cvs'
+
+    leads = read_leads() #lista - array
+
+    try:
+        with path_csv.open('w', newline='',encoding='utf-8') as file_csv:
+            write = csv.DictWriter(file_csv, fieldnames=leads[0].keys())
+            write.writeheader()
+            for row in leads:
+                write.writerow(row)
+        return path_csv
+    except PermissionError:
+        return None
 
 
+#Read leads from query/search
+def read_leads_search(query):
+    leads = read_leads()
+    results = []
 
+    for i, lead in enumerate(leads):
+        txt_lead = f'{lead['name']} {lead['email']} {lead['company']}'.lower()
 
-#Delete
+        if query.lower() in txt_lead:
+            results.append((i, lead))
+
+    return results
