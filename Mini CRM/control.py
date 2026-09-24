@@ -1,5 +1,5 @@
 from pathlib import Path
-import json, csv
+import json, csv, os, tempfile
 
 DATA_DIR = Path(__file__).resolve().parent / 'data'
 DATA_DIR.mkdir(exist_ok=True)
@@ -19,9 +19,18 @@ def read_leads():
 
 #Create (atualizar o creat lead)
 def create_lead(lead_dict):
-    leads = read_leads() #Lista de dicionários de leads
+    leads = read_leads()
     leads.append(lead_dict)
-    DB_PATH.write_text(json.dumps(leads, ensure_ascii=False, indent=2), encoding='utf-8')
+
+    # grava em arquivo temporário na mesma pasta e só troca no final (atômico)
+    fd, tmp_path = tempfile.mkstemp(dir=DATA_DIR, suffix='.tmp')
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+            json.dump(leads, f, ensure_ascii=False, indent=2)
+        os.replace(tmp_path, DB_PATH)  # troca atômica no SO
+    except Exception:
+        os.remove(tmp_path)
+        raise
 
 #Update
 def update_lead(indice):
