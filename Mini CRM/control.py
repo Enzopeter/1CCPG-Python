@@ -17,11 +17,63 @@ def read_leads():
     except json.JSONDecodeError:
         return []
 
-#Create
+#Create (atualizar o creat lead)
 def create_lead(lead_dict):
     leads = read_leads() #Lista de dicionários de leads
     leads.append(lead_dict)
     DB_PATH.write_text(json.dumps(leads, ensure_ascii=False, indent=2), encoding='utf-8')
+
+#Update
+def update_lead(indice):
+    leads = read_leads()
+
+    if indice < 0 or indice >= len(leads):
+        return False
+
+    lead = leads[indice]
+
+    name = input(f'Nome [{lead["name"]}]: ')
+    email = input(f'E-mail [{lead["email"]}]: ')
+    company = input(f'Empresa [{lead["company"]}]: ')
+
+    if not name:
+        name = lead["name"]
+
+    if not email:
+        email = lead["email"]
+
+    if not company:
+        company = lead["company"]
+
+    if not name or not email or not company or '@' not in email:
+        print('Nome ou e-mail inválido')
+        return False
+
+    lead["name"] = name
+    lead["email"] = email
+    lead["company"] = company
+
+    DB_PATH.write_text(
+        json.dumps(leads, ensure_ascii=False, indent=2), encoding='utf-8'
+    )
+
+    return True
+
+#Delete
+def delete_lead(indice):
+    leads = read_leads()
+
+    if indice < 0 or indice >= len(leads):
+        return False
+
+    leads.pop(indice)
+
+    DB_PATH.write_text(
+        json.dumps(leads, ensure_ascii=False, indent=2),
+        encoding='utf-8'
+    )
+
+    return True
 
 #Export leads como CSV
 def export_csv(): #Exporta os leads para CSV e Retorna o caminho do arquivo criado

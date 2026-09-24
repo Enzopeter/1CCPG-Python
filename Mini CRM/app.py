@@ -54,6 +54,48 @@ def export_leads():
     else:
         print(f'Exportado para {path_csv}')
 
+def atualizar_lead():
+    list_leads()
+
+    indice = input("Digite o número do lead que deseja atualizar: ")
+
+    if not indice.isdigit():
+        print("Número inválido")
+        return
+
+    indice = int(indice)
+
+    if control.update_lead(indice):
+        print("Lead atualizado com sucesso!")
+    else:
+        print("Lead não encontrado")
+
+def excluir_lead():
+    list_leads()
+
+    indice = input("Digite o número do lead que deseja excluir: ")
+
+    if not indice.isdigit():
+        print("Número inválido")
+        return
+
+    indice = int(indice) - 1
+
+    leads = control.read_leads()
+
+    lead = leads[indice]
+
+    confirmacao = input(f"Tem certeza que deseja excluir {lead['name']}? (s/n): ").lower()
+
+    if confirmacao != "s":
+        print("Exclusão cancelada")
+        return
+
+    if control.delete_lead(indice):
+        print("Lead excluído com sucesso!")
+    else:
+        print("Lead não encontrado")
+
 def main():
     while True:
         print('\nMini CRM de leads')
@@ -61,6 +103,8 @@ def main():
         print('[2] Listar leads')
         print('[3] Buscar (nome/e-mail/empresa)')
         print('[4] Exporta CSV')
+        print('[5] Atualizar um lead')
+        print('[6] Excluir lead')
         print('[0] Sair do programa')
 
         opt = input('Escolha uma opção: ')
@@ -73,6 +117,10 @@ def main():
             search_leads()
         elif opt == "4":
             export_leads()
+        elif opt == '5':
+            atualizar_lead()
+        elif opt == '6':
+            excluir_lead()
         elif opt == "0":
             print('Até mais...')
             break
